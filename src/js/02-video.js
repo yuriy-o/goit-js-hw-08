@@ -1,15 +1,18 @@
+import throttle from 'lodash.throttle';
 import Player from '@vimeo/player';
 
 const iframe = document.querySelector('iframe');
 const player = new Player(iframe);
 
-player.on('timeupdate', function (e) {
+const throttle = require('lodash.throttle'); //викликаю throttle → частина бібліотеки Lodash
+
+player.on('timeupdate', throttle(setTimePlay, 1000));
+
+function setTimePlay(e) {
   const timePlay = e.seconds;
-  console.log(timePlay);
-
   localStorage.setItem('videoplayer-current-time', timePlay);
-});
+}
 
-const localTime = localStorage.getItem('videoplayer-current-time');
+const localTime = localStorage.getItem('videoplayer-current-time'); //Отримую час з локального сховища
 
-player.setCurrentTime(localTime); //задає плеєру час з локального сховища
+player.setCurrentTime(localTime); //задаю плеєру час з локального сховища
