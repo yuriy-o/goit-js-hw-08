@@ -17,6 +17,10 @@ function onDataToForm(e) {
   const msgValue = e.currentTarget.elements.message.value;
   // console.log(e.currentTarget.elements.message.value);
 
+  //  const {
+  //   elements: { email, message },
+  // } = e.currentTarget;
+
   const arrayEntryData = { email: emailValue, message: msgValue };
 
   localStorage.setItem('feedback-form-state', JSON.stringify(arrayEntryData)); //записую масив введених даних в localStorage
