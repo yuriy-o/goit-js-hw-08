@@ -12,10 +12,10 @@ saveDataTextarea();
 
 function onDataToForm(e) {
   const emailValue = e.currentTarget.elements.email.value;
-  console.log(e.currentTarget.elements.email.value);
+  // console.log(e.currentTarget.elements.email.value);
 
   const msgValue = e.currentTarget.elements.message.value;
-  console.log(e.currentTarget.elements.message.value);
+  // console.log(e.currentTarget.elements.message.value);
 
   const arrayEntryData = { email: emailValue, message: msgValue };
 
