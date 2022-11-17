@@ -8,25 +8,16 @@ formEl.addEventListener('submit', onFormSubmit);
 formEl.addEventListener('input', throttle(onDataToForm, 500));
 
 //   !!!!!!!! v2 !!!!!!!!!!
-// initForm();
-let arrayEntryData = {}; //TODO\\ масив введених даних
+saveDataTextarea();
 
 function onDataToForm(e) {
-  // console.log(e.target.name);
-  // console.log(e.target.value);
-  // const names = e.target.name;
-  // const value = e.target.value;
-  // const arr = { names: value, names: value };
-  // console.log(arr);
+  const emailValue = e.currentTarget.elements.email.value;
+  console.log(e.currentTarget.elements.email.value);
 
-  const { name: key, value } = e.target;
-  arrayEntryData[key] = value; //TODO\\ записую введені дані в масив
+  const msgValue = e.currentTarget.elements.message.value;
+  console.log(e.currentTarget.elements.message.value);
 
-  // const {
-  //   elements: { email, message },
-  // } = e.currentTarget;
-
-  // const arr = { email: email.value, message: message.value };
+  const arrayEntryData = { email: emailValue, message: msgValue };
 
   localStorage.setItem('feedback-form-state', JSON.stringify(arrayEntryData)); //записую масив введених даних в localStorage
 }
@@ -34,25 +25,12 @@ function onDataToForm(e) {
 function saveDataTextarea() {
   const saveTextarea = JSON.parse(localStorage.getItem('feedback-form-state'));
 
-  // try {
-  //   const saveTextarea = JSON.parse(
-  //     localStorage.getItem('feedback-form-state')
-  //   );
-  // } catch (error) {
-  //   console.log('can`t load feedback-form-stat');
-  // }
-  //Отримую дані з localStorage
-
-  // inputEl.value = saveTextarea.email || ''; //Записую значення + перевірка
-  // textareaEl.value = saveTextarea.message || ''; //Записую значення + перевірка
-
-  if (saveTextarea.email) {
-    inputEl.value = saveTextarea.email;
+  if (saveTextarea) {
+    inputEl.value = saveTextarea.email || ''; // Можливо ці умови можна поєднати
   }
-  // console.log('aveTextarea.email', saveTextarea.email);
-
-  // inputEl.value = saveTextarea.email || ''; //Записую значення + перевірка
-  textareaEl.value = saveTextarea.message || ''; //Записую значення + перевірка
+  if (saveTextarea) {
+    textareaEl.value = saveTextarea.message || '';
+  }
 }
 
 function onFormSubmit(e) {
@@ -61,25 +39,15 @@ function onFormSubmit(e) {
   const dataLocalStorage = JSON.parse(
     localStorage.getItem('feedback-form-state')
   );
-  console.log('Введені дані: ', dataLocalStorage); // Вивожу в консоль масив введених даних
 
-  localStorage.removeItem('feedback-form-state'); //Видаляє дані з localStorage
+  if (dataLocalStorage) {
+    console.log('Введені дані: ', dataLocalStorage); // Вивожу в консоль масив введених даних
+  }
+
+  localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
 
   e.currentTarget.reset(); //Очищаю поля форми
 }
-
-// function initForm() {
-//   let formDatas = localStorage.getItem('arrayEntryData');
-//   if (formDatas) {
-//     formDatas = JSON.parse(formDatas);
-//     Object.entries(formDatas).forEach(([name, value]) => {
-//       arrayEntryData[name] = value;
-//       formEl.elements[name].value = value;
-//     });
-//   }
-// }
-
-saveDataTextarea();
 
 //   !!!!!!!! v2 !!!!!!!!!!
 
