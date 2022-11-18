@@ -5,18 +5,16 @@ const inputEl = document.querySelector('input[name="email"]');
 const textareaEl = document.querySelector('textarea[name="message"]');
 
 formEl.addEventListener('submit', onFormSubmit);
-formEl.addEventListener('input', onDataToForm);
+formEl.addEventListener('input', throttle(onDataToForm, 500));
 
 saveDataTextarea();
 
-function onDataToForm(e) {
-  const emailValue = e.currentTarget.elements.email.value;
-  const msgValue = e.currentTarget.elements.message.value;
-
-  const arrayEntryData = { email: emailValue, message: msgValue };
-
-  localStorage.setItem('feedback-form-state', JSON.stringify(arrayEntryData)); //записую масив введених даних в localStorage
-}
+const formData = {};
+const getFormDataFromLS = key => JSON.parse(localStorage.getItem(key));
+const onDataToForm = e => {
+  formData[e.target.name] = e.target.value;
+  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
+};
 
 function saveDataTextarea() {
   const saveTextarea = JSON.parse(localStorage.getItem('feedback-form-state'));
