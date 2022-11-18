@@ -12,11 +12,7 @@ saveDataTextarea();
 
 function onDataToForm(e) {
   const emailValue = e.currentTarget.elements.email.value;
-  // console.log(e.currentTarget.elements.email.value);
-
   const msgValue = e.currentTarget.elements.message.value;
-  // console.log(e.currentTarget.elements.message.value);
-
   //  const {
   //   elements: { email, message },
   // } = e.currentTarget;
@@ -29,8 +25,12 @@ function onDataToForm(e) {
 function saveDataTextarea() {
   const saveTextarea = JSON.parse(localStorage.getItem('feedback-form-state'));
 
+  // Object.entries(saveTextarea).map(input => {
+  //   console.log(input);
+  // });
+
   if (saveTextarea) {
-    inputEl.value = saveTextarea.email || ''; // Можливо ці умови можна поєднати
+    inputEl.value = saveTextarea.email || ''; // Можливо ці умови слід поєднати!
   }
   if (saveTextarea) {
     textareaEl.value = saveTextarea.message || '';
