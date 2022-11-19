@@ -27,7 +27,7 @@ function onFormSubmit(e) {
   try {
     JSON.parse(getlocalStorage);
   } catch (error) {
-    console.error('Can`t parse JSON from Local Store');
+    console.error('Get state error: ', error.message);
   }
 
   if (!refs.inputEl.value) {
