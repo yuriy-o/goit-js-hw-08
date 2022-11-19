@@ -16,25 +16,33 @@ function onFormData(e) {
   const { name: key, value } = e.target;
   entryData[key] = value;
 
-  // console.log('refs.inputEl.value', refs.inputEl.value);
-
   localStorage.setItem('feedback-form-state', JSON.stringify(entryData)); //записую масив введених даних в localStorage
 }
 
 function onFormSubmit(e) {
   e.preventDefault();
 
-  const getlocalStorage = JSON.parse(
-    localStorage.getItem('feedback-form-state')
-  );
+  const getlocalStorage = localStorage.getItem('feedback-form-state');
+
+  try {
+    JSON.parse(getlocalStorage);
+  } catch (error) {
+    console.error('Can`t parse JSON from Local Store');
+  }
+
+  if (!refs.inputEl.value) {
+    alert('Введіть email');
+    return;
+  } else if (!refs.textareaEl.value) {
+    alert('Введіть текст');
+    return;
+  } else e.currentTarget.reset(); //Очищаю поля форми
 
   if (getlocalStorage) {
-    console.log('Введені дані: ', getlocalStorage); // Вивожу в консоль масив введених даних
+    console.log('Введені дані: ', JSON.parse(getlocalStorage)); // Вивожу в консоль масив введених даних
   }
 
   localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
-
-  e.currentTarget.reset(); //Очищаю поля форми
 }
 
 function onSaveData() {
@@ -46,46 +54,4 @@ function onSaveData() {
     refs.inputEl.value = getlocalStorage.email || '';
     refs.textareaEl.value = getlocalStorage.message || '';
   }
-
-  // console.log('getlocalStorage', getlocalStorage);
-  // console.log('getlocalStorage.email', getlocalStorage.email);
-  // console.log('getlocalStorage.message', getlocalStorage.message);
 }
-
-// saveDataTextarea();
-
-// function onDataToForm(e) {
-//   const emailValue = e.currentTarget.elements.email.value;
-//   const msgValue = e.currentTarget.elements.message.value;
-
-//   const arrayEntryData = { email: emailValue, message: msgValue };
-//   тзь;
-//   localStorage.setItem('feedback-form-state', JSON.stringify(arrayEntryData)); //записую масив введених даних в localStorage
-// }
-
-// function saveDataTextarea() {
-//   const saveTextarea = JSON.parse(localStorage.getItem('feedback-form-state'));
-
-//   if (saveTextarea) {
-//     inputEl.value = saveTextarea.email || ''; // Можливо ці умови слід поєднати!
-//   }
-//   if (saveTextarea) {
-//     textareaEl.value = saveTextarea.message || '';
-//   }
-// }
-
-// function onFormSubmit(e) {
-//   e.preventDefault();
-
-//   const dataLocalStorage = JSON.parse(
-//     localStorage.getItem('feedback-form-state')
-//   );
-
-//   if (dataLocalStorage) {
-//     console.log('Введені дані: ', dataLocalStorage); // Вивожу в консоль масив введених даних
-//   }
-
-//   localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
-
-//   e.currentTarget.reset(); //Очищаю поля форми
-// }
