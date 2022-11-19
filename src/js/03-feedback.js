@@ -9,6 +9,7 @@ const refs = {
 refs.formEl.addEventListener('submit', onFormSubmit);
 refs.formEl.addEventListener('input', throttle(onFormData, 500));
 
+onSaveData();
 const entryData = {};
 
 function onFormData(e) {
@@ -27,22 +28,28 @@ function onFormSubmit(e) {
     localStorage.getItem('feedback-form-state')
   );
 
-  // const emailValue = e.currentTarget.elements.email.value;
-  // const msgValue = e.currentTarget.elements.message.value;
-
-  console.log('getlocalStorage', getlocalStorage);
-  // console.log('getlocalStorage.email', getlocalStorage.email);
-  // console.log('getlocalStorage.message', getlocalStorage.message);
-
-  // refs.inputEl.value = getlocalStorage.email;
-  // refs.textareaEl.value = getlocalStorage.message;
-
   if (getlocalStorage) {
-    refs.inputEl.value = getlocalStorage.email;
-    refs.textareaEl.value = getlocalStorage.message;
+    console.log('Введені дані: ', getlocalStorage); // Вивожу в консоль масив введених даних
   }
 
+  localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
+
   e.currentTarget.reset(); //Очищаю поля форми
+}
+
+function onSaveData() {
+  const getlocalStorage = JSON.parse(
+    localStorage.getItem('feedback-form-state')
+  );
+
+  if (getlocalStorage) {
+    refs.inputEl.value = getlocalStorage.email || '';
+    refs.textareaEl.value = getlocalStorage.message || '';
+  }
+
+  // console.log('getlocalStorage', getlocalStorage);
+  // console.log('getlocalStorage.email', getlocalStorage.email);
+  // console.log('getlocalStorage.message', getlocalStorage.message);
 }
 
 // saveDataTextarea();
