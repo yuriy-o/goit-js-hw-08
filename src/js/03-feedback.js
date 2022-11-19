@@ -1,46 +1,84 @@
 import throttle from 'lodash.throttle';
 
-const formEl = document.querySelector('.feedback-form');
-const inputEl = document.querySelector('input[name="email"]');
-const textareaEl = document.querySelector('textarea[name="message"]');
+const refs = {
+  formEl: document.querySelector('.feedback-form'),
+  inputEl: document.querySelector('input[name="email"]'),
+  textareaEl: document.querySelector('textarea[name="message"]'),
+};
 
-formEl.addEventListener('submit', onFormSubmit);
-formEl.addEventListener('input', onDataToForm);
+refs.formEl.addEventListener('submit', onFormSubmit);
+refs.formEl.addEventListener('input', throttle(onFormData, 500));
 
-saveDataTextarea();
+const entryData = {};
 
-function onDataToForm(e) {
-  const emailValue = e.currentTarget.elements.email.value;
-  const msgValue = e.currentTarget.elements.message.value;
+function onFormData(e) {
+  const { name: key, value } = e.target;
+  entryData[key] = value;
 
-  const arrayEntryData = { email: emailValue, message: msgValue };
+  // console.log('refs.inputEl.value', refs.inputEl.value);
 
-  localStorage.setItem('feedback-form-state', JSON.stringify(arrayEntryData)); //записую масив введених даних в localStorage
-}
-
-function saveDataTextarea() {
-  const saveTextarea = JSON.parse(localStorage.getItem('feedback-form-state'));
-
-  if (saveTextarea) {
-    inputEl.value = saveTextarea.email || ''; // Можливо ці умови слід поєднати!
-  }
-  if (saveTextarea) {
-    textareaEl.value = saveTextarea.message || '';
-  }
+  localStorage.setItem('feedback-form-state', JSON.stringify(entryData)); //записую масив введених даних в localStorage
 }
 
 function onFormSubmit(e) {
   e.preventDefault();
 
-  const dataLocalStorage = JSON.parse(
+  const getlocalStorage = JSON.parse(
     localStorage.getItem('feedback-form-state')
   );
 
-  if (dataLocalStorage) {
-    console.log('Введені дані: ', dataLocalStorage); // Вивожу в консоль масив введених даних
-  }
+  // const emailValue = e.currentTarget.elements.email.value;
+  // const msgValue = e.currentTarget.elements.message.value;
 
-  localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
+  console.log('getlocalStorage', getlocalStorage);
+  // console.log('getlocalStorage.email', getlocalStorage.email);
+  // console.log('getlocalStorage.message', getlocalStorage.message);
+
+  // refs.inputEl.value = getlocalStorage.email;
+  // refs.textareaEl.value = getlocalStorage.message;
+
+  if (getlocalStorage) {
+    refs.inputEl.value = getlocalStorage.email;
+    refs.textareaEl.value = getlocalStorage.message;
+  }
 
   e.currentTarget.reset(); //Очищаю поля форми
 }
+
+// saveDataTextarea();
+
+// function onDataToForm(e) {
+//   const emailValue = e.currentTarget.elements.email.value;
+//   const msgValue = e.currentTarget.elements.message.value;
+
+//   const arrayEntryData = { email: emailValue, message: msgValue };
+//   тзь;
+//   localStorage.setItem('feedback-form-state', JSON.stringify(arrayEntryData)); //записую масив введених даних в localStorage
+// }
+
+// function saveDataTextarea() {
+//   const saveTextarea = JSON.parse(localStorage.getItem('feedback-form-state'));
+
+//   if (saveTextarea) {
+//     inputEl.value = saveTextarea.email || ''; // Можливо ці умови слід поєднати!
+//   }
+//   if (saveTextarea) {
+//     textareaEl.value = saveTextarea.message || '';
+//   }
+// }
+
+// function onFormSubmit(e) {
+//   e.preventDefault();
+
+//   const dataLocalStorage = JSON.parse(
+//     localStorage.getItem('feedback-form-state')
+//   );
+
+//   if (dataLocalStorage) {
+//     console.log('Введені дані: ', dataLocalStorage); // Вивожу в консоль масив введених даних
+//   }
+
+//   localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
+
+//   e.currentTarget.reset(); //Очищаю поля форми
+// }

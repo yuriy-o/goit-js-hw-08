@@ -7,6 +7,8 @@ const textareaEl = document.querySelector('textarea[name="message"]');
 formEl.addEventListener('submit', onFormSubmit);
 formEl.addEventListener('input', throttle(onDataToForm, 500));
 
+// const throttle = require('lodash.throttle'); //викликаю throttle → частина бібліотеки Lodash
+
 saveDataTextarea();
 
 function onDataToForm(e) {
