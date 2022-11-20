@@ -1,61 +1,36 @@
 import throttle from 'lodash.throttle';
+import { save, load, remove } from './storage';
 
 const refs = {
-  formEl: document.querySelector('.feedback-form'),
-  inputEl: document.querySelector('input[name="email"]'),
-  textareaEl: document.querySelector('textarea[name="message"]'),
+  form: document.querySelector('.feedback-form'),
 };
 
-refs.formEl.addEventListener('submit', onFormSubmit);
-refs.formEl.addEventListener('input', throttle(onFormData, 500));
+refs.form.addEventListener('input', throttle(onFormClick, 1000));
+refs.form.addEventListener('submit', onFormSubmit);
 
-function onFormData() {
-  // const { name: key, value } = e.target;
-  // entryData[key] = value;
-
-  const inputValue = refs.inputEl.value;
-  const textareaValue = refs.textareaEl.value;
-  const entryData = `{email: ${inputValue}, message: ${textareaValue}}`;
-  console.log(entryData);
-
-  localStorage.setItem('feedback-form-state', JSON.stringify(entryData)); //записую масив введених даних в localStorage
+const loadedObj = load('feedback-form-state');
+if (loadedObj) {
+  Object.entries(loadedObj).forEach(([name, value]) => {
+    refs.form.elements[name].value = value;
+  });
 }
 
-onSaveData();
-
-function onFormSubmit(e) {
-  e.preventDefault();
-
-  const getlocalStorage = localStorage.getItem('feedback-form-state');
-
-  try {
-    JSON.parse(getlocalStorage);
-  } catch (error) {
-    console.error('Get state error: ', error.message);
-  }
-
-  if (!refs.inputEl.value) {
-    alert('Введіть email');
-    return;
-  } else if (!refs.textareaEl.value) {
-    alert('Введіть текст');
-    return;
-  } else e.currentTarget.reset(); //Очищаю поля форми
-
-  if (getlocalStorage) {
-    console.log('Введені дані: ', JSON.parse(getlocalStorage)); // Вивожу в консоль масив введених даних
-  }
-
-  localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
+function onFormClick(evt) {
+  const { name, value } = evt.target;
+  let formObj = load('feedback-form-state');
+  formObj = formObj || {};
+  formObj[name] = value;
+  save('feedback-form-state', formObj);
 }
 
-function onSaveData() {
-  const getlocalStorage = JSON.parse(
-    localStorage.getItem('feedback-form-state')
-  );
+//! Додати перевірки на пусті дані
+function onFormSubmit(evt) {
+  evt.preventDefault();
 
-  if (getlocalStorage) {
-    refs.inputEl.value = getlocalStorage.email || '';
-    refs.textareaEl.value = getlocalStorage.message || '';
+  let formObj = load('feedback-form-state');
+  if (formObj) {
+    console.log(formObj);
+    evt.currentTarget.reset();
+    remove('feedback-form-state');
   }
 }
