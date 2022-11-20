@@ -10,7 +10,9 @@ refs.formEl.addEventListener('submit', onFormSubmit);
 refs.formEl.addEventListener('input', throttle(onFormData, 500));
 
 onSaveData();
-const entryData = {};
+
+//! Спочатку записую дані з localStorage. Якщо даних нема, тоді по умові зміній записується пустий об'єкт
+let entryData = JSON.parse(localStorage.getItem('feedback-form-state')) || {};
 
 function onFormData(e) {
   const { name: key, value } = e.target;
@@ -43,6 +45,7 @@ function onFormSubmit(e) {
   }
 
   localStorage.removeItem('feedback-form-state'); //Видаляю дані з localStorage
+  entryData = {}; //Очищаю дані з проміжного масиву
 }
 
 function onSaveData() {
