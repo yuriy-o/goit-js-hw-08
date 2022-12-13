@@ -13,13 +13,15 @@ function onCreateImagesGallery(galleryItems) {
   return galleryItems
     .map(({ preview, original, description }) => {
       return `<a class="gallery__item" href="${original}">
-         <img loading="lazy"
-            class="gallery__image"
-            src="${preview}"
-            alt="${description}"
-            width="354" height="240"
-            />
-</a>`;
+                <img
+                  loading="lazy"
+                  class="gallery__image"
+                  src="${preview}"
+                  alt="${description}"
+                  width="354"
+                  height="240"
+                />
+              </a>`;
     })
     .join('');
 }
